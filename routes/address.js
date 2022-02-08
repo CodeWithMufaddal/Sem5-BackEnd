@@ -1,0 +1,122 @@
+const express = require("express");
+const router = express.Router();
+const { body, validationResult } = require('express-validator');
+const Address = require("../models/Address");
+const fetchUser = require("../middleware/fetchUser");
+
+// Route: 1 Fetch User Address using Get "/api/Address/AllAddress" - { login required }
+router.get('/AllAddress', fetchUser, async (req, res) => {
+   let success = false;
+   // let address =
+   // console.log(req.user)
+   try {
+      let address = await Address.find({ user: req.user.id })
+      success = true;
+      res.send({ success, address });
+
+   } catch (error) {
+      success = false;
+      res.status(500).json({
+         error: "Server error", message: error.message
+      });
+
+
+   }
+})
+
+
+// Route: 2 Create a New Address using Post "/api/Address/AddNewAddress" - { login required }
+router.post('/AddNewAddress', fetchUser, [
+   body('country', "UserName Must be atleast 3 characters long"),
+   body('fullName', "UserName Must be atleast 3 characters long"),
+   body('MobileNumber').isMobilePhone('en-IN').isLength({ min: 10, max: 10 }).isInt(),
+   body('PinCode').isLength({ min: 6, max: 6 }).isInt(),
+   body('house').not().isEmpty().trim().escape(),
+   body('street').not().isEmpty().trim().escape(),
+   body('landmark').not().isEmpty().trim().escape(),
+   body('City').not().isEmpty().trim().escape(),
+   body('State').not().isEmpty().trim().escape(),
+
+], async (req, res) => {
+   let success = false;
+
+   // Check error by using validationResult
+   const errors = validationResult(req);
+   if (!errors.isEmpty()) {
+      return res.status(400).json({ success, errors: errors.array() })
+   }
+
+   const { country, fullName, MobileNumber, PinCode, house, street, landmark, City, State } = req.body;
+   try {
+      const address = new Address({ user: req.user.id, country, fullName, MobileNumber, PinCode, house, street, landmark, City, State })
+      const saveAddress = await address.save();
+      success = true;
+      res.json({ success, saveAddress });
+
+   } catch (error) {
+      success = false;
+      res.status(500).json({ success, error, message: error.message });
+   }
+
+
+
+})
+
+
+// Route: 3 Update a User Address Using Put "/api/Address/UpdateAddress" - { login required }
+router.put('/UpdateAddress/:id', fetchUser, async (req, res) => {
+   let success = false;
+   const { country, fullName, MobileNumber, PinCode, house, street, landmark, City, State } = req.body;
+   try {
+      let newAddress = {}
+      if (country) { newAddress.country = country; }
+      if (MobileNumber) { newAddress.MobileNumber = MobileNumber; }
+      if (fullName) { newAddress.fullName = fullName; }
+      if (PinCode) { newAddress.PinCode = PinCode; }
+      if (house) { newAddress.house = house; }
+      if (street) { newAddress.street = street; }
+      if (landmark) { newAddress.landmark = landmark; }
+      if (City) { newAddress.City = City; }
+      if (State) { newAddress.State = State; }
+
+      // Find the address by id to be update it
+      let address = await Address.findById(req.params.id);
+      if (!address) { return res.status(404).json({ success, message: "Address Not Found" }); }
+
+      // Check if the user is the owner of the address
+      if (address.user.toString() !== req.user.id) { return res.status(401).send("UnAuthorized access!"); }
+      // Update the address
+      address = await Address.findByIdAndUpdate(req.params.id, { $set: newAddress }, { new: true });
+      success = true;
+      res.json({ success, address });
+
+   } catch (error) {
+      success = false;
+      res.status(500).json({ success, error: "Server Error", message: error.message });
+   }
+})
+
+
+// Route: 4 Delete user Address Using Delete "/api/Address/DeleteAddress" - { login required }
+router.delete('/DeleteAddress/:id', fetchUser, async (req, res) => {
+   let success = false;
+   try {
+      // Find the address by id to be delete it
+      let address = await Address.findById(req.params.id);
+      if (!address) { return res.status(404).json({ success, message: "Address Not Found" }); }
+
+      // Check if the user is the owner of the address
+      if (address.user.toString() !== req.user.id) { return res.status(401).send("UnAuthorized access!"); }
+      // Delete the address
+      address = await Address.findByIdAndDelete(req.params.id);
+      success = true;
+      res.json({ success, address });
+   } catch (error) {
+      success = false;
+      res.status(500).json({ success, error: "Server Error", message: error.message });
+   }
+})
+
+
+
+module.exports = router;
