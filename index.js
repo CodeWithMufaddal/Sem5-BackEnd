@@ -4,7 +4,7 @@ const cors = require("cors");
 const app = express();
 const algoliasearch = require('algoliasearch');
 
-require('dotenv').config({ path: './.env.local' });
+require('dotenv').config({ path: '.env.local' });
 const port = process.env.PORT;
 
 ConnectToMongo()
