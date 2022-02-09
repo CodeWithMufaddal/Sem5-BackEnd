@@ -3,9 +3,9 @@ require('dotenv').config({ path: './BackEnd/.env.local', });
 const algoliasearch = require('algoliasearch');
 const fetch = require('node-fetch');
 
-const apiKey = process.env.REACT_APP_ALGOLIA_API_KEY;
-const appId = process.env.REACT_APP_ALGOLIA_APP_ID;
-const indexName = process.env.REACT_APP_ALGOLIA_INDEX_NAME
+const apiKey = process.env.ALGOLIA_API_KEY;
+const appId = process.env.ALGOLIA_APP_ID;
+const indexName = process.env.ALGOLIA_INDEX_NAME
 
 const client = algoliasearch(appId, apiKey);
 const index = client.initIndex(indexName);
