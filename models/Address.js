@@ -2,16 +2,16 @@ const mongoose = require('mongoose');
 const { Schema } = mongoose;
 const AddressSchema = new Schema({
    user: { type: mongoose.Schema.Types.ObjectId, ref: 'user' },
-   country: { type: String, required: true },
-   fullName: { type: String, required: true },
+   Country: { type: String, required: true },
+   FullName: { type: String, required: true },
    MobileNumber: { type: String, required: true },
-   PinCode: { type: Number, required: true },  // 6 digit     
-   house: { type: String, required: true },
-   street: { type: String, required: true },
-   landmark: String,
+   PinCode: { type: Number, required: true, capped: { size: 6 } },  // 6 digit     
+   House: { type: String, required: true },
+   Street: { type: String, required: true },
+   Landmark: String,
    City: { type: String, required: true },
    State: { type: String, required: true },
-   default: { type: Boolean, default: false },
+   Default: { type: Boolean, default: false },
    date: { type: Date, default: Date }
 
 })

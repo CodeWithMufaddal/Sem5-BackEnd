@@ -27,13 +27,13 @@ router.get('/AllAddress', fetchUser, async (req, res) => {
 
 // Route: 2 Create a New Address using Post "/api/Address/AddNewAddress" - { login required }
 router.post('/AddNewAddress', fetchUser, [
-   body('country', "UserName Must be atleast 3 characters long"),
-   body('fullName', "UserName Must be atleast 3 characters long"),
-   body('MobileNumber').isMobilePhone('en-IN').isLength({ min: 10, max: 10 }).isInt(),
-   body('PinCode').isLength({ min: 6, max: 6 }).isInt(),
-   body('house').not().isEmpty().trim().escape(),
-   body('street').not().isEmpty().trim().escape(),
-   body('landmark').not().isEmpty().trim().escape(),
+   body('Country', "UserName Must be atleast 3 characters long"),
+   body('FullName', "UserName Must be atleast 3 characters long"),
+   body('MobileNumber').isMobilePhone('en-IN').isLength(10).isInt(),
+   body('PinCode').isLength(6).isInt(),
+   body('House').not().isEmpty().trim().escape(),
+   body('Street').not().isEmpty().trim().escape(),
+   body('Landmark').not().isEmpty().trim().escape(),
    body('City').not().isEmpty().trim().escape(),
    body('State').not().isEmpty().trim().escape(),
 
@@ -46,9 +46,9 @@ router.post('/AddNewAddress', fetchUser, [
       return res.status(400).json({ success, errors: errors.array() })
    }
 
-   const { country, fullName, MobileNumber, PinCode, house, street, landmark, City, State } = req.body;
+   const { Country, FullName, MobileNumber, PinCode, House, Street, Landmark, City, State } = req.body;
    try {
-      const address = new Address({ user: req.user.id, country, fullName, MobileNumber, PinCode, house, street, landmark, City, State })
+      const address = new Address({ user: req.user.id, Country, FullName, MobileNumber, PinCode, House, Street, Landmark, City, State })
       const saveAddress = await address.save();
       success = true;
       res.json({ success, saveAddress });
@@ -66,16 +66,16 @@ router.post('/AddNewAddress', fetchUser, [
 // Route: 3 Update a User Address Using Put "/api/Address/UpdateAddress" - { login required }
 router.put('/UpdateAddress/:id', fetchUser, async (req, res) => {
    let success = false;
-   const { country, fullName, MobileNumber, PinCode, house, street, landmark, City, State } = req.body;
+   const { Country, FullName, MobileNumber, PinCode, House, Street, Landmark, City, State } = req.body;
    try {
       let newAddress = {}
-      if (country) { newAddress.country = country; }
+      if (Country) { newAddress.Country = Country; }
       if (MobileNumber) { newAddress.MobileNumber = MobileNumber; }
-      if (fullName) { newAddress.fullName = fullName; }
+      if (FullName) { newAddress.FullName = FullName; }
       if (PinCode) { newAddress.PinCode = PinCode; }
-      if (house) { newAddress.house = house; }
-      if (street) { newAddress.street = street; }
-      if (landmark) { newAddress.landmark = landmark; }
+      if (House) { newAddress.House = House; }
+      if (Street) { newAddress.Street = Street; }
+      if (Landmark) { newAddress.Landmark = Landmark; }
       if (City) { newAddress.City = City; }
       if (State) { newAddress.State = State; }
 
