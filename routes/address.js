@@ -55,7 +55,7 @@ router.post('/AddNewAddress', fetchUser, [
 
    } catch (error) {
       success = false;
-      res.status(500).json({ success, error, message: error.message });
+      res.status(500).json({ success, error, message: error.message, msg: "this massage accurd in address.js " });
    }
 
 
