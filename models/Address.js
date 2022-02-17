@@ -13,7 +13,6 @@ const AddressSchema = new Schema({
    State: { type: String, required: true },
    Default: { type: Boolean, default: false },
    date: { type: Date, default: Date }
-
 })
 
 

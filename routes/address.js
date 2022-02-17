@@ -43,7 +43,7 @@ router.post('/AddNewAddress', fetchUser, [
    // Check error by using validationResult
    const errors = validationResult(req);
    if (!errors.isEmpty()) {
-      return res.status(400).json({ success, errors: errors.array() })
+      return res.status(400).json({success, errors: errors.array() })
    }
 
    const { Country, FullName, MobileNumber, PinCode, House, Street, Landmark, City, State } = req.body;
