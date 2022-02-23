@@ -6,7 +6,7 @@ const algoliasearch = require('algoliasearch');
 
 require('dotenv').config({ path: '.env.local' });
 const port = process.env.PORT;
-// const port = 5000
+// const port = 5500
 
 ConnectToMongo()
 app.use(cors())
