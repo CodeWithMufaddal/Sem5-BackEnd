@@ -8,4 +8,4 @@ const ConnectToMongo = async () => {
    console.log("Connected to MongoDB")  
 }
 
-module.exports = ConnectToMongo
+module.exports = ConnectToMongo  

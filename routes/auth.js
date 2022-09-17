@@ -29,7 +29,7 @@ router.post('/register', [
 
       let user = await User.findOne({ email });
       if (user) {
-         return res.status(400).json({ success, errors: "User already exists" });
+         return res.status(401).json({ success, errors: "User already exists" });
       }
 
       const salt = await bcrypt.genSalt(10);
